@@ -15,89 +15,17 @@ export class VotehomeComponent implements OnInit {
               private router: Router) { }
   
   user: Object;
-  fruits: Object[]; // change this to correct type as well
+  fruitVotes: Object[]; // change this to correct type as well
   // this is the list of all fruits apple, banana ....
   fruitsList: Object[]; // change this to the correct type
   selectedEntry: String;
   username: String;
   fruitCount: String;
 
-  // fruitIncluded(fruit) {
-  //   console.log('Fruit sent in for check is ' + fruit);
-  //   var result = false;
-  //   console.log('Fruits are ' + this.fruits);
-  //   this.fruits.map(item => {
-  //     console.log('Current item is ' + JSON.stringify(item));
-  //     var currentItem = JSON.parse(JSON.stringify(item));
-  //     if (currentItem._id == fruit) {
-  //       result = true;
-  //       return;
-  //     }
-  //   });
-  //   console.log('The value of result is ' + result);
-  //   console.log('The type is ' + typeof(result));
-  //   return result;
-  // }
-
-  getFruitCount(fruit) {
-    console.log("Finding the count of an existing fruit " + fruit);
-    // let findObj = this.fruits.find(item => JSON.parse(JSON.stringify(item))._id == fruit);
-    // this.fruits.map(item => {
-    //   var currentItem = JSON.parse(JSON.stringify(item));
-    //   console.log('Iterating through ' + currentItem._id + ' ' + currentItem.cnt);
-    //   console.log("For compare " + fruit);
-    //   console.log('Type 1 is ' + typeof(currentItem._id) + ' Type 2 is ' + typeof(fruit));
-    //   console.log(currentItem._id == fruit);
-    //   if (currentItem._id == fruit) {
-    //     console.log('There is a match for count');
-    //     this.fruitCount = currentItem.cnt;
-    //     return;
-    //   }
-    // });
-    return 0;
-  }
-
-  // with change in option
-  onVoteButtonClick(fruit) {
-    this.selectedEntry = fruit._id;
-    console.log("Selected entry is " + this.selectedEntry);
-    // update the user vote (if changed)
-    const userFruit = {
-      username: this.username,
-      fruit: this.selectedEntry
-    };
-
-    this.authorizationService.changeVote(userFruit).subscribe(data => {
-      console.log("The data is " + data);
-      if (data.success) {
-        // find a way to add the flashMessage
-        console.log("Update successful!");
-        this.flashMessageService.show('Vote updated successfully!', {cssClass: 'alert-success', timeout: 2500});
-      }
-
-      else {
-        console.log("Update failed");
-        this.flashMessageService.show(data.msg, {cssClass: 'alert-success', timeout: 2500});
-      }
-    });
-    // refetch the votes count
-    this.authorizationService.getVoteData().subscribe(voteData => {
-      this.fruits = voteData;
-    },
-    // observable syntax
-    errorCode => {
-      console.log(errorCode);
-      return false;
-    });
-  }
-
-
   ngOnInit() {
     this.authorizationService.getProfile().subscribe(profile => {
-      console.log("Getting profile data ...");
       this.user = profile.user;
       this.username = profile.user.username;
-      console.log('User name is ' + JSON.stringify(this.username));
     },
     errorCode => {
       console.log(errorCode);
@@ -117,7 +45,7 @@ export class VotehomeComponent implements OnInit {
     });
 
     this.authorizationService.getVoteData().subscribe(voteData => {
-      this.fruits = voteData;
+      this.fruitVotes = voteData;
       console.log('Fetched aggregated vote data');
       console.log('Populated vote data successfully!');
     },
@@ -127,7 +55,59 @@ export class VotehomeComponent implements OnInit {
       console.log(errorCode);
       return false;
     });
-    
   }
 
+  getFruitCount(fruit) {
+    console.log("Finding the count of an existing fruit " + fruit);
+    console.log("Fruits votes " + JSON.stringify(this.fruitVotes));
+    if (this.fruitVotes) {
+      var fruitVotesString = JSON.stringify(this.fruitVotes);
+      var stringIndex = fruitVotesString.indexOf(fruit);
+      if (stringIndex != -1) {
+        // console.log('Slice is ' + fruitVotesString.slice(stringIndex + fruit.length + 8, -2));
+        var temp = JSON.parse(fruitVotesString).find(function(x) {
+          return x._id == fruit;
+        });
+        return temp.cnt;
+        // return fruitVotesString.slice(stringIndex + fruit.length + 8, fruitVotesString.length - 2);
+      }
+    }
+    return 0;
+  }
+
+  // with change in option
+  onVoteButtonClick(fruit) {
+    console.log('Fruit being sent in is ' + fruit);
+    this.selectedEntry = fruit;
+    console.log("Selected entry is " + this.selectedEntry);
+    // update the user vote (if changed)
+    const userFruit = {
+      username: this.username,
+      fruit: this.selectedEntry
+    };
+
+    this.authorizationService.changeVote(userFruit).subscribe(data => {
+      console.log("The data is " + data);
+      if (data.success) {
+        // find a way to add the flashMessage
+        console.log("Update successful!");
+        this.flashMessageService.show('Vote updated successfully!', {cssClass: 'alert-success', timeout: 2500});
+        // refetch the votes count
+        this.authorizationService.getVoteData().subscribe(voteData => {
+          this.fruitVotes = voteData;
+          console.log('Updated vote data is ' + JSON.stringify(voteData));
+        },
+        // observable syntax
+        errorCode => {
+          console.log(errorCode);
+          return false;
+        });
+      }
+
+      else {
+        console.log("Update failed");
+        this.flashMessageService.show(data.msg, {cssClass: 'alert-success', timeout: 2500});
+      }
+    });
+  }
 }
