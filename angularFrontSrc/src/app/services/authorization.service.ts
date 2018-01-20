@@ -15,14 +15,14 @@ export class AuthorizationService {
     headers.append('Content-Type', 'application/json');
     // send a post request
     // console.log('Send a request to backend');
-    return this.http.post('http://localhost:3000/users/registration', user, {headers: headers}).map(response => response.json());
+    return this.http.post('http://localhost:3000/api/registration', user, {headers: headers}).map(response => response.json());
   }
 
   // authentication function
   authenticateUser(user) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/users/authentication', user, {headers: headers}).map(response => response.json());
+    return this.http.post('http://localhost:3000/api/authentication', user, {headers: headers}).map(response => response.json());
   }
 
   storeUserData(token, user) {
@@ -30,6 +30,47 @@ export class AuthorizationService {
     localStorage.setItem('user', JSON.stringify(user));
     this.authToken = token;
     this.user = user;
+  }
+
+  getProfile() {
+    console.log('Call being made to getProfile() ...');
+    let headers = new Headers();
+    this.loadAuthToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:3000/api/profile', {headers: headers}).map(response => response.json());
+  }
+
+  getVoteData() {
+    let headers = new Headers();
+    this.loadAuthToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:3000/api/votes', {headers: headers}).map(response => response.json());
+  }
+
+  changeVote(userFruit) {
+    let headers = new Headers();
+    this.loadAuthToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.put('http://localhost:3000/api/votes', userFruit, {headers: headers}).map(response => response.json());
+  }
+
+  getFruitsList() {
+    console.log('Call made to getFruitsList');
+    let headers = new Headers();
+    this.loadAuthToken();
+    headers.append('Authorization', this.authToken);
+    headers.append('Content-Type', 'application/json');
+    return this.http.get('http://localhost:3000/api/fruits', {headers: headers}).map(response => response.json());
+  }
+
+  loadAuthToken() {
+    console.log('Call to fetch token ...');
+    const token = localStorage.getItem('id_token');
+    console.log('Token is ' + token);
+    this.authToken = token;
   }
 
   logout() {

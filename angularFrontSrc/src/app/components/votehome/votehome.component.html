@@ -1,3 +1,25 @@
-<p>
-  votehome works!
-</p>
+<div>
+  <h2 class="page-header">Current vote statistics</h2>
+    <h2>Click an arrow to vote for that fruit.</h2>
+  <table>
+    <thead>
+      <td><h3>Selection</h3></td>
+      <td style="padding-left: 20%"><h3>Fruit</h3></td>
+      <td style="padding-left: 40%"><h3>Votes</h3></td>
+    </thead>
+    <!-- <button type="button" class="btn btn-success" (change)="onRadioChange(fruit)">Vote</button> -->
+    <!-- <input type="radio" name="radiogroup" [value]="fruit._id" (change)="onRadioChange(fruit)"> -->
+    <tbody>
+      <tr *ngFor="let fruit of fruitsList">
+        <td>
+          <button style="border-radius: 100%" (click)="onVoteButtonClick(fruit)">
+          <span class="glyphicon glyphicon-chevron-up" [ngStyle]="{'font-size': '20px', 'color': selectedEntry == fruit? 'green': 'black'}"
+                aria-hidden="true"></span>
+          </button>
+        </td>
+        <td style="padding-left: 20%; font-size: 30px">{{ fruit }}</td>
+        <td style="padding-left: 40%; font-size: 30px">{{ getFruitCount(fruit) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div> 

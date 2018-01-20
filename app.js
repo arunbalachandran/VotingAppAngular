@@ -8,13 +8,13 @@ const mongoose = require('mongoose');  // for communicating with mongoDB
 // app specific configuration
 const app = express();
 const port = 3000;
-const users = require('./routes/users');
+const api = require('./routes/api');
 const configuration = require('./configuration/database');
 
 mongoose.connect(configuration.database);
 
 mongoose.connection.on('connected', () => {
-    console.log('Established connection to database' + configuration.database);
+    console.log('Established connection to database : ' + configuration.database);
 });
 
 mongoose.connection.on('error', (errorCode) => {
@@ -35,12 +35,12 @@ require('./configuration/passport')(passport);
 // allow the app to use a static folder
 app.use(express.static(path.join(__dirname, 'staticFiles')));
 
-// use the /users route from the routes folder
-app.use('/users', users);
+// use the /api route from the routes folder
+app.use('/api', api);
 
 // add a demo route
 app.get('/', (request, response) => {
-    response.send("Flesh out the demo app");
+    response.send("Home page of the Voting API.");
 });
 
 app.listen(port, () => {

@@ -37,7 +37,7 @@ const appRoutes: Routes = [
     VotehomeComponent,
     DashboardComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
   ],
   imports: [
     BrowserModule,
