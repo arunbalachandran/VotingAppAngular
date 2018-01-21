@@ -1,4 +1,4 @@
 module.exports = {
-    database: "mongodb://localhost:27017/votingUsers",
+    database: process.env.MONGODB_URI,
     secret: "Cat dog snake mouse"
 }
