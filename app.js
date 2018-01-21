@@ -7,7 +7,8 @@ const mongoose = require('mongoose');  // for communicating with mongoDB
 
 // app specific configuration
 const app = express();
-const port = 3000;
+// const port = 3000;
+const port = process.env.PORT || 8080;
 const api = require('./routes/api');
 const configuration = require('./configuration/database');
 
@@ -33,7 +34,7 @@ app.use(passport.session());
 require('./configuration/passport')(passport);
 
 // allow the app to use a static folder
-app.use(express.static(path.join(__dirname, 'staticFiles')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // use the /api route from the routes folder
 app.use('/api', api);

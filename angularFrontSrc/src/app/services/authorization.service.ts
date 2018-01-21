@@ -17,14 +17,14 @@ export class AuthorizationService {
     headers.append('Content-Type', 'application/json');
     // send a post request
     // console.log('Send a request to backend');
-    return this.http.post('http://localhost:3000/api/registration', user, {headers: headers}).map(response => response.json());
+    return this.http.post('api/registration', user, {headers: headers}).map(response => response.json());
   }
 
   // authentication function
   authenticateUser(user) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    return this.http.post('http://localhost:3000/api/authentication', user, {headers: headers}).map(response => response.json());
+    return this.http.post('api/authentication', user, {headers: headers}).map(response => response.json());
   }
 
   storeUserData(token, user) {
@@ -40,7 +40,7 @@ export class AuthorizationService {
     this.loadAuthToken();
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:3000/api/profile', {headers: headers}).map(response => response.json());
+    return this.http.get('api/profile', {headers: headers}).map(response => response.json());
   }
 
   getVoteData() {
@@ -48,7 +48,7 @@ export class AuthorizationService {
     this.loadAuthToken();
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:3000/api/votes', {headers: headers}).map(response => response.json());
+    return this.http.get('api/votes', {headers: headers}).map(response => response.json());
   }
 
   changeVote(userFruit) {
@@ -56,7 +56,7 @@ export class AuthorizationService {
     this.loadAuthToken();
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type', 'application/json');
-    return this.http.put('http://localhost:3000/api/votes', userFruit, {headers: headers}).map(response => response.json());
+    return this.http.put('api/votes', userFruit, {headers: headers}).map(response => response.json());
   }
 
   getFruitsList() {
@@ -65,7 +65,7 @@ export class AuthorizationService {
     this.loadAuthToken();
     headers.append('Authorization', this.authToken);
     headers.append('Content-Type', 'application/json');
-    return this.http.get('http://localhost:3000/api/fruits', {headers: headers}).map(response => response.json());
+    return this.http.get('api/fruits', {headers: headers}).map(response => response.json());
   }
 
   loadAuthToken() {
