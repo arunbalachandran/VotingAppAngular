@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 // do we need this?
 import { HttpModule } from '@angular/http';
-
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { LoginComponent } from './components/login/login.component';
@@ -20,13 +19,14 @@ import { ValidateService } from './services/validate.service';
 import { FlashMessagesModule, FlashMessagesService } from 'angular2-flash-messages';
 // bring in the auth service so that it can be used across the app
 import { AuthorizationService } from './services/authorization.service';
+import { AuthGuard } from './guards/authorization.guard';
 
 const appRoutes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent},
-  {path: 'votehome', component: VotehomeComponent}
+  {path: 'votehome', component: VotehomeComponent, canActivate: [AuthGuard]}
 ];
 
 @NgModule({
@@ -47,7 +47,7 @@ const appRoutes: Routes = [
     FlashMessagesModule
   ],
   // manually add the services over here as well
-  providers: [ValidateService, FlashMessagesService, AuthorizationService],
+  providers: [ValidateService, FlashMessagesService, AuthorizationService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

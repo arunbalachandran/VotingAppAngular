@@ -43,6 +43,10 @@ app.get('/', (request, response) => {
     response.send("Home page of the Voting API.");
 });
 
+app.get('*', (request, response) => {
+    response.sendFile(path.join(__dirname, 'public/index.html'));
+});
+
 app.listen(port, () => {
     console.log("Hello world! The application has started on port " + port + "\n");
 });

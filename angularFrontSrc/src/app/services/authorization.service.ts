@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map'; // used for the auth service callback
+// import tokenNotExpired
+import { tokenNotExpired } from 'angular2-jwt';
+
 
 @Injectable()
 export class AuthorizationService {
   authToken: any;
   user: any;
-
   constructor(private http: Http) { }
 
   // on registering a user
@@ -71,6 +73,11 @@ export class AuthorizationService {
     const token = localStorage.getItem('id_token');
     console.log('Token is ' + token);
     this.authToken = token;
+  }
+
+  loggedIn() {
+    console.log('Token not expired is ' + tokenNotExpired('id_token'));
+    return tokenNotExpired('id_token');
   }
 
   logout() {
